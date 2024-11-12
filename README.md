@@ -150,13 +150,28 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 7\.  Monthly Sales Trends
 
-*It shows the SQL query used to calculate monthly sales and identify the month with the highest sales. This functionality can be uncommented and implemented if needed.
+* It shows the SQL query used to calculate monthly sales and identify the month with the highest sales. This functionality can be uncommented and implemented if needed.
+
+### 8\. Category with Highest Sales
+
+* The script prints the category with the highest total sales based on the data in `Salestxns.xlsx`.
+
+### 9\. State-wise Sales Comparison (Texas vs. Ohio)
+
+* A pie chart named `state_comparison_pie.png` is created, visualizing the sales comparison between Texas and Ohio. This comparison is based on the data in Salestxns.xlsx and `customers.xlsx`.
+
+### 10\. Detailed Customer Purchase Report (CSV File)
+
+* This section of the code generates a detailed report of each customer's purchases, including their total spending, number of transactions, and average transaction value. The report is saved as a CSV file for further analysis or reporting.
+
+   ### Using the CSV Report:
+     The generated customer_report.csv file can be used for various purposes, such as:
+     * **Customer Segmentation:** Identifying high-value customers or customer segments.
+     * **Customer Retention:** Analyzing customer behavior and identifying potential churn risks.
+     * **Marketing Campaigns:** Targeting specific customer segments with personalized offers.
+     * **Business Insights:** Gaining deeper insights into customer purchasing patterns and preferences.
+  By analyzing this report, we can make data-driven decisions to improve customer satisfaction, increase sales, and optimize marketing strategies.
   
-
-  
-
-  `
-
 ## Code Explanation
 
 ### 1\. Importing Required Libraries
