@@ -1,4 +1,4 @@
-## Walmart Sales Data Pipeline with PySpark
+# Walmart Sales Data Pipeline with PySpark
 
 ## Overview
 
@@ -45,10 +45,47 @@ Apache Spark is a powerful open-source framework used for large-scale data proce
   ```
 This will open an interactive Spark shell where you can directly execute Spark code.
 
-* **Apache Spark Web UI:**
-The Spark Web UI helps monitor tasks, stages, and resource allocation. By default, it is accessible at:
-* Running locally (http://localhost:4040)
-* Docker: [http://host.docker.internal:4040](http://host.docker.internal:4040)
+## Apache Spark Web UI:
+The Spark Web UI is a useful tool for monitoring the status of your Spark jobs, checking resource utilization, and troubleshooting.
+
+### 1\. Starting the Spark Web UI:
+
+* Once the Spark session starts, the Web UI automatically opens on localhost by default. The default port is 4040, but in this script, we specified the port as 4041 using `config("spark.ui.port", "4041")`.
+  
+### 2\. Accessing the UI:
+*  If running locally: Go to (http://localhost:4041) in your web browser.
+*  If running in Docker: Use (http://host.docker.internal:4041).
+
+## 3\. Monitoring Tasks and Stages:
+
+* The UI shows detailed information about job stages, tasks, storage, and environmental settings, helping you monitor and optimize Spark jobs in real-time.
+
+## Explanation of Partitions in Spark:
+
+Partitions are a fundamental concept in Spark that divides data into smaller chunks, allowing for distributed and parallel processing across multiple nodes in a cluster.
+
+## 1\. What Are Partitions?
+
+* Partitions are logical divisions of the dataset that enable Spark to distribute and process data in parallel. Each partition is processed independently, which maximizes computational efficiency.
+
+## 2\. Why Partitioning Matters:
+
+**Performance:**  Partitioning enables parallel execution, improving performance, especially with large datasets.
+**Data Locality:**: Partitions are often processed on the nodes where the data resides, minimizing network latency and reducing data movement.
+
+## 3\. Setting Number of Partitions:
+
+* In this script, we set `spark.sql.shuffle.partitions` to 200. This configuration controls the number of partitions used during shuffle operations (such as joins and aggregations). Increasing this value is beneficial for large datasets to prevent memory issues and improve performance. However, setting it too high could add overhead.
+
+## 4\. Caching DataFrames:
+
+* We use `.cache()` on the `sales_df` and `customer_df` DataFrames. Caching stores the DataFrames in memory, improving the speed of subsequent actions that access the same data, especially for iterative queries or transformations.
+
+## 5\. Optimization Techniques:
+
+**Executor Memory:**  : We allocate `4g` for both executor and driver memory, allowing Spark to handle larger data processing in memory.
+`
+**Executor Cores:**: Setting executor cores to 2 enables each executor to run two tasks concurrently, enhancing parallel processing.
 
 ## Code Explanation
 
@@ -87,7 +124,7 @@ This code initializes a SparkSession with specific configurations:
 * **num.executors:** Specifies the number of executors for distributed computing.
 * **spark.sql.shuffle.partitions:** Sets partitions to optimize performance during shuffles.
 
-### 3\.Loading Data from Excel
+### 3\. Loading Data from Excel
 
 ```bash
 file_path_sales = "C:/Users/user/OneDrive/Desktop/Salestxns.xlsx"
@@ -105,13 +142,13 @@ customer_df = spark.createDataFrame(customer_df_pd)
 ```
 We convert Pandas DataFrames to Spark DataFrames for Spark processing. Spark DataFrames enable distributed processing and efficient querying
 
-### 5\.Caching DataFrames
+### 5\. Caching DataFrames
 
 ```bash
 sales_df.cache()
 customer_df.cache()
 ```
-### 6\.Registering Temporary views
+### 6\. Registering Temporary views
 
 ```bash
 sales_df.createOrReplaceTempView("sales_data")
@@ -119,7 +156,7 @@ customer_df.createOrReplaceTempView("customers")
 ```
 Temporary views allow running SQL queries directly on Spark DataFrames.
 
-### 7\.SQL Queries and Visualization
+### 7\. SQL Queries and Visualization
 **1. Total number of unique customers:**
 
 ```bash
@@ -195,7 +232,7 @@ customer_purchases_pd = customer_purchases.toPandas()
 Analyzes product purchases for a specific customer (Customer ID 245). Plots data using a pie chart if there are fewer than 10 products; otherwise, uses a bar chart.
 
 **7. Monthly Sales Trends:**
-To analyze monthly sales trends and identify the month with the highest sales, we’ll assume there is a date field in the sales_data table. In this example, let’s call the field `Transaction_Date`. Here’s the SQL query to calculate total monthly sales and identify the month with the highest sales.
+To analyze monthly sales trends and identify the month with the highest sales, we’ll assume there is a date field in the `sales_data` table. In this example, let’s call the field `Transaction_Date`. Here’s the SQL query to calculate total monthly sales and identify the month with the highest sales.
 
 ```bash
 # SQL query to calculate monthly sales and identify the highest sales month
