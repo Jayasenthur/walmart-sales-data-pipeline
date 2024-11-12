@@ -87,6 +87,42 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 `
 **Executor Cores:**: Setting executor cores to 2 enables each executor to run two tasks concurrently, enhancing parallel processing.
 
+## Setup Instructions
+
+## 1\. Install Pyspark:
+* If you don't have Pyspark installed, use pip: `pip install pyspark`
+* You might need additional dependencies like Hadoop and a compatible version of Python. Refer to the official documentation for detailed setup instructions:
+
+## 2\. Download Spark Libraries:
+
+* Download the pre-built Spark binaries from (https://spark.apache.org/downloads.html) (choose a version compatible with your Python installation).
+* Unpack the downloaded archive and set environment variables accordingly
+    * `SPARK_HOME`: Path to the unpacked Spark directory
+    * `PYSPARK_DRIVER_PYTHON`: Path to your Python executable (which python or similar)
+* You can also use a virtual environment to manage dependencies and avoid conflicts.
+
+##  Data Preparation
+
+* Ensure you have the two Excel files (`Salestxns.xlsx` and `customers.xlsx`) in the specified locations `(C:/Users/user/OneDrive/Desktop/)`.
+* Adjust the file paths in the code if necessary to match your file locations.
+
+## Running Instructions
+
+**1. Save the Code:**
+  * Create a Python file (e.g., `sales_analysis.py`) and paste the provided code into it.
+
+**2. Run the Script:**
+  * Open a terminal or command prompt and navigate to the directory containing the Python file.
+  * Run the script using the Python interpreter: python `sales_analysis.py` (replace python with your Python executable name if needed)
+
+## Data Explanations
+
+  * `Salestxns.xlsx`: Likely contains transactions, with columns like `Product_Name`, `Customer_Id`, `Price`, `Quantity`, and potentially `Transaction_Date`.
+  * `customers.xlsx`: Likely includes customer information, possibly with columns like `Customer_Id` and `Name`, and perhaps `State`.
+
+## Outputs and Visuals Explanation
+
+`
 ## Code Explanation
 
 ### 1\. Importing Required Libraries
