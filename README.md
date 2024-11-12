@@ -122,12 +122,46 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ## Outputs and Visuals Explanation
 
-`
+### 1\. Total Number of Unique Customers
+
+* The script generates a message indicating the total number of unique customers identified in the `customers.xlsx` file.
+  
+### 2\. Total Sales by State (Pie or Bar Chart)
+
+* A plot (either pie chart for few states or bar chart for many) is created and saved as `sales_by_state_pie.png` or `sales_by_state_bar.png`.
+* The chart shows the total sales for each state based on the data from `Salestxns.xlsx` and `customers.xlsx`.
+
+### 3\. Top 10 Most Purchased Products
+
+* A bar chart named top_products.png is generated, displaying the top 10 most purchased products (based on quantity) in `Salestxns.xlsx`.
+
+### 4\. Average Transaction Value
+
+*The script prints the average transaction value (average total price per purchase) calculated from `Salestxns.xlsx`.
+
+### 5\. Top 5 Customers by Expenditure (Horizontal Bar Chart)
+
+*A horizontal bar chart named top_customers.png is created, showing the top 5 customers who spent the most money, according to the data from `Salestxns.xlsx` and `customers.xlsx`.
+
+### 6\. Product Purchases by a Specific Customer (ID 245)
+
+* A plot (pie chart for few products or bar chart for many) is generated and saved as `customer_purchases_245_pie.png` or customer_purchases_245_bar.png`.
+* The plot shows the products purchased by customer ID 245 and their total cost, based on information from `Salestxns.xlsx`.
+
+### 7\.  Monthly Sales Trends
+
+*It shows the SQL query used to calculate monthly sales and identify the month with the highest sales. This functionality can be uncommented and implemented if needed.
+  
+
+  
+
+  `
+
 ## Code Explanation
 
 ### 1\. Importing Required Libraries
 
-```bash
+```python
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 import matplotlib.pyplot as plt
@@ -140,7 +174,7 @@ Here, we import essential libraries:
 
 ### 2\. Initializing Spark Session with Configuration
 
-```bash
+```python
 spark = SparkSession.builder \
     .appName("Sales Analysis") \
     .config("spark.executor.memory", "4g") \
@@ -162,7 +196,7 @@ This code initializes a SparkSession with specific configurations:
 
 ### 3\. Loading Data from Excel
 
-```bash
+```python
 file_path_sales = "C:/Users/user/OneDrive/Desktop/Salestxns.xlsx"
 file_path_customer = "C:/Users/user/OneDrive/Desktop/customers.xlsx"
 sales_df_pd = pd.read_excel(file_path_sales)
@@ -172,7 +206,7 @@ Using Pandas to load Excel files into DataFrames (`sales_df_pd` and `customer_df
 
 ### 4\. Coverting Dataframes to Spark Dataframes
 
-```bash
+```python
 sales_df = spark.createDataFrame(sales_df_pd)
 customer_df = spark.createDataFrame(customer_df_pd)
 ```
@@ -180,13 +214,13 @@ We convert Pandas DataFrames to Spark DataFrames for Spark processing. Spark Dat
 
 ### 5\. Caching DataFrames
 
-```bash
+```python
 sales_df.cache()
 customer_df.cache()
 ```
 ### 6\. Registering Temporary views
 
-```bash
+```python
 sales_df.createOrReplaceTempView("sales_data")
 customer_df.createOrReplaceTempView("customers")
 ```
@@ -195,7 +229,7 @@ Temporary views allow running SQL queries directly on Spark DataFrames.
 ### 7\. SQL Queries and Visualization
 **1. Total number of unique customers:**
 
-```bash
+```python
 total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Customers FROM customers")
 total_customers_pd = total_customers.toPandas()
 print("Total Number of Unique Customers:", total_customers_pd['Total_Customers'][0])
@@ -204,7 +238,7 @@ This query finds the total number of unique customers by counting distinct Custo
 
 **2. Total Sales by State:**
 
-```bash
+```python
 sales_by_state = spark.sql("""
     SELECT c.State, SUM(s.Price * s.Quantity) AS Total_Sales
     FROM sales_data s
@@ -217,7 +251,7 @@ This query aggregates sales per state and visualizes the data with a pie chart i
 
 **3. Top 10 Most Purchased Products:**
 
-```bash
+```python
 top_products = spark.sql("""
     SELECT Product_Name, SUM(Quantity) AS Total_Quantity
     FROM sales_data
@@ -231,7 +265,7 @@ Aggregates sales quantity by product name, displays the top 10 most purchased pr
 
 **4. Average Transaction Value:**
 
-```bash
+```python
 avg_transaction_value = spark.sql("SELECT AVG(Price * Quantity) AS Avg_Transaction_Value FROM sales_data")
 avg_transaction_value_pd = avg_transaction_value.toPandas()
 print("Average Transaction Value:", avg_transaction_value_pd['Avg_Transaction_Value'][0])
@@ -240,7 +274,7 @@ Calculates the average transaction value by multiplying `Price` and `Quantity`.
 
 **5. Top 5 Customers by Expenditure:**
 
-```bash
+```python
 top_customers = spark.sql("""
     SELECT c.Customer_Id, c.Name, SUM(s.Price * s.Quantity) AS Total_Spent
     FROM sales_data s
@@ -255,7 +289,7 @@ Shows the top 5 customers by expenditure using a horizontal bar chart.
 
 **6. Product Purchases by Specific Customer:**
 
-```bash
+```python
 customer_purchases = spark.sql("""
     SELECT s.Product_Name, SUM(s.Quantity * s.Price) AS Total_Amount
     FROM sales_data s
@@ -270,7 +304,7 @@ Analyzes product purchases for a specific customer (Customer ID 245). Plots data
 **7. Monthly Sales Trends:**
 To analyze monthly sales trends and identify the month with the highest sales, we’ll assume there is a date field in the `sales_data` table. In this example, let’s call the field `Transaction_Date`. Here’s the SQL query to calculate total monthly sales and identify the month with the highest sales.
 
-```bash
+```python
 # SQL query to calculate monthly sales and identify the highest sales month
 monthly_sales_trend = spark.sql("""
     SELECT 
@@ -286,7 +320,7 @@ This query will output each month’s sales and indicate which month had the hig
 
 **8. Category with Highest Sales:**
 
-```bash
+```python
 top_category = spark.sql("""
     SELECT Category_Name, SUM(Price * Quantity) AS Total_Category_Sales
     FROM sales_data
@@ -301,7 +335,7 @@ This query identifies the category with the highest sales.
 
 **9. State-Wise Sales Comparison (Texas vs Ohio):**
 
-```bash
+```python
 state_comparison = spark.sql("""
     SELECT c.State, SUM(s.Price * Quantity) AS Total_State_Sales
     FROM sales_data s
@@ -315,7 +349,7 @@ Compares sales between Texas and Ohio using a pie chart.
 
 **10. Detailed Customer Purchase Report:**
 
-```bash
+```python
 customer_report = spark.sql("""
     SELECT DISTINCT (c.Customer_Id), c.Name, 
            SUM(s.Price * Quantity) AS Total_Purchases, 
