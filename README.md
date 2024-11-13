@@ -178,7 +178,6 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ```python
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
 import matplotlib.pyplot as plt
 import pandas as pd
  ```
