@@ -2,54 +2,63 @@
 ```python
 # Import necessary libraries
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
 import matplotlib.pyplot as plt
 import pandas as pd
 
 # Initialize Spark Session with configuration
+# Configures 2 executors to handle tasks in parallel.
+# Allocates 2 CPU cores to each executor.
+# Sets the UI port to 4041, where we can monitor Spark job progress.
 try:    
     spark = SparkSession.builder \
         .appName("Sales Analysis") \
-        .config("spark.executor.memory", "4g") \
+        .config("spark.executor.memory", "4g") \ # Allocates 2 CPU cores to each executor.
         .config("spark.driver.memory", "4g") \
         .config("spark.executor.cores", "2") \
         .config("spark.ui.port", "4041") \
         .config("spark.num.executors", "2") \
         .getOrCreate()
 
-    # Set shuffle partitions to optimize performance
+    # Sets the number of shuffle partitions to 200, optimizing performance during joins and aggregations by reducing shuffle tasks.
     spark.conf.set("spark.sql.shuffle.partitions", "200")
 
+# Handles any errors during the Spark session setup, printing an error message and exiting if an error occurs.
 except Exception as e:
     print(f"Error starting SparkSession: {str(e)}")
     exit(1)
 
-# Load data using Pandas for easier file handling, then convert to Spark DataFrames
+# Load Excel data
 file_path_sales = "C:/Users/user/OneDrive/Desktop/Salestxns.xlsx"
 file_path_customer = "C:/Users/user/OneDrive/Desktop/customers.xlsx"
+
+# Reads an Excel file into a Pandas DataFrame for salestxns data.
 sales_df_pd = pd.read_excel(file_path_sales)
+
+# Reads the customer Excel file into a Pandas DataFrame.
 customer_df_pd = pd.read_excel(file_path_customer)
 
 # Convert to Spark DataFrames
 sales_df = spark.createDataFrame(sales_df_pd)
 customer_df = spark.createDataFrame(customer_df_pd)
 
-# Cache DataFrames to improve repeated access performance
+# Cache DataFrames in memory to improve repeated access performance by avoiding re-computation.
 sales_df.cache()
 customer_df.cache()
 
-# Register the DataFrames as temporary SQL views
+# Register the DataFrames as temporary SQL views that allows us to use SQL commands to query our data like a database.
 sales_df.createOrReplaceTempView("sales_data")
 customer_df.createOrReplaceTempView("customers")
 
 # SQL Analysis and Conditional Plotting
 
-# 1. Total Number of Unique Customers
+# 1. SQL query counts unique customers in the "customers" view.
 total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Customers FROM customers")
+
+# Converts Spark DataFrame to Pandas for display.
 total_customers_pd = total_customers.toPandas()
 print("Total Number of Unique Customers:", total_customers_pd['Total_Customers'][0])
 
-# 2. Total Sales by State (Pie Chart if suitable)
+# 2. SQL Query joins sales and customers to get total sales per state and groups results by state..
 sales_by_state = spark.sql("""
     SELECT c.State, SUM(s.Price * s.Quantity) AS Total_Sales
     FROM sales_data s
@@ -72,9 +81,11 @@ else:
     plt.title('Total Sales by State')
     plt.xticks(rotation=45)
     plt.tight_layout()
+
+    # Saves the chart as an image file.
     plt.savefig('sales_by_state_bar.png')
 
-# 3. Top 10 Most Purchased Products
+# 3. SQL Query aggregates sales quantities by product name and selects the top 10.
 top_products = spark.sql("""
     SELECT Product_Name, SUM(Quantity) AS Total_Quantity
     FROM sales_data
@@ -124,8 +135,6 @@ customer_purchases = spark.sql("""
     GROUP BY s.Product_Name
 """)
 customer_purchases_pd = customer_purchases.toPandas()
-
-
 
 if len(customer_purchases_pd) <= 10:
     plt.figure()
