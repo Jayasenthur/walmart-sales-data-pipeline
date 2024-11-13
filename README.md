@@ -378,4 +378,13 @@ customer_report_pd.to_csv("customer_report.csv", index=False)
 ```
 Generates a detailed report of each customer's purchases, transactions, and average transaction value, saved as `customer_report.csv`.
 
+**10. Stop the Spark Session:**
+
+```python
+spark.stop()
+```
+This command frees up resources used by Spark when we're done.
+
+
+
 
