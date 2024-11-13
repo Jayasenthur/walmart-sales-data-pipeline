@@ -70,12 +70,12 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ## 2\. Why Partitioning Matters:
 
-**Performance:**  Partitioning enables parallel execution, improving performance, especially with large datasets.
-**Data Locality:**: Partitions are often processed on the nodes where the data resides, minimizing network latency and reducing data movement.
+* **Performance:**  Partitioning enables parallel execution, improving performance, especially with large datasets.
+* **Data Locality:**: Partitions are often processed on the nodes where the data resides, minimizing network latency and reducing data movement.
 
 ## 3\. Setting Number of Partitions:
 
-* In this script, we set `spark.sql.shuffle.partitions` to 200. This configuration controls the number of partitions used during shuffle operations (such as joins and aggregations). Increasing this value is beneficial for large datasets to prevent memory issues and improve performance. However, setting it too high could add overhead.
+* In this script, we set `spark.sql.shuffle.partitions` to 200. This configuration controls the number of partitions used during shuffle operations (such as joins and aggregations). Increasing this value is beneficial for large datasets to prevent memory issues and improve performance. 
 
 ## 4\. Caching DataFrames:
 
@@ -83,9 +83,9 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ## 5\. Optimization Techniques:
 
-**Executor Memory:**  : We allocate `4g` for both executor and driver memory, allowing Spark to handle larger data processing in memory.
+* **Executor Memory:** : We allocate `4g` for both executor and driver memory, allowing Spark to handle larger data processing in memory.
 `
-**Executor Cores:**: Setting executor cores to 2 enables each executor to run two tasks concurrently, enhancing parallel processing.
+* **Executor Cores:** : Setting executor cores to 2 enables each executor to run two tasks concurrently, enhancing parallel processing.
 
 ## Setup Instructions
 
@@ -103,7 +103,7 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ##  Data Preparation
 
-* Ensure you have the two Excel files (`Salestxns.xlsx` and `customers.xlsx`) in the specified locations `(C:/Users/user/OneDrive/Desktop/)`.
+* Ensure you have the two Excel files (`Salestxns.xlsx` and `customers.xlsx`) as input.
 * Adjust the file paths in the code if necessary to match your file locations.
 
 ## Running Instructions
@@ -137,11 +137,11 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 4\. Average Transaction Value
 
-*The script prints the average transaction value (average total price per purchase) calculated from `Salestxns.xlsx`.
+* The script prints the average transaction value (average total price per purchase) calculated from `Salestxns.xlsx`.
 
 ### 5\. Top 5 Customers by Expenditure (Horizontal Bar Chart)
 
-*A horizontal bar chart named top_customers.png is created, showing the top 5 customers who spent the most money, according to the data from `Salestxns.xlsx` and `customers.xlsx`.
+* A horizontal bar chart named top_customers.png is created, showing the top 5 customers who spent the most money, according to the data from `Salestxns.xlsx` and `customers.xlsx`.
 
 ### 6\. Product Purchases by a Specific Customer (ID 245)
 
@@ -150,7 +150,7 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 7\.  Monthly Sales Trends
 
-* It shows the SQL query used to calculate monthly sales and identify the month with the highest sales. This functionality can be uncommented and implemented if needed.
+* It demonstrates how to analyze monthly sales trends, but it assumes the existence of a `Date` column within your sales_data DataFrame.
 
 ### 8\. Category with Highest Sales
 
@@ -158,14 +158,14 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 9\. State-wise Sales Comparison (Texas vs. Ohio)
 
-* A pie chart named `state_comparison_pie.png` is created, visualizing the sales comparison between Texas and Ohio. This comparison is based on the data in Salestxns.xlsx and `customers.xlsx`.
+* A pie chart named `state_comparison_pie.png` is created, visualizing the sales comparison between Texas and Ohio. This comparison is based on the data in `Salestxns.xlsx` and `customers.xlsx`.
 
 ### 10\. Detailed Customer Purchase Report (CSV File)
 
 * This section of the code generates a detailed report of each customer's purchases, including their total spending, number of transactions, and average transaction value. The report is saved as a CSV file for further analysis or reporting.
 
    ### Using the CSV Report:
-     The generated customer_report.csv file can be used for various purposes, such as:
+     The generated `customer_report.csv` file can be used for various purposes, such as:
      * **Customer Segmentation:** Identifying high-value customers or customer segments.
      * **Customer Retention:** Analyzing customer behavior and identifying potential churn risks.
      * **Marketing Campaigns:** Targeting specific customer segments with personalized offers.
@@ -182,9 +182,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
  ```
 Here, we import essential libraries:
-* `SparkSession` and `col` from PySpark for managing data and SQL functions.
+* `SparkSession` from PySpark for managing data and SQL functions.
 * `matplotlib.pyplot` for visualizations.
-* `pandas` to handle Excel files easily.
+* `pandas` to handle Excel files easily and for Data manipulation.
 
 ### 2\. Initializing Spark Session with Configuration
 
@@ -211,8 +211,8 @@ This code initializes a SparkSession with specific configurations:
 ### 3\. Loading Data from Excel
 
 ```python
-file_path_sales = "C:/Users/user/OneDrive/Desktop/Salestxns.xlsx"
-file_path_customer = "C:/Users/user/OneDrive/Desktop/customers.xlsx"
+file_path_sales = "Salestxns.xlsx"
+file_path_customer = "customers.xlsx"
 sales_df_pd = pd.read_excel(file_path_sales)
 customer_df_pd = pd.read_excel(file_path_customer)
  ```
@@ -224,9 +224,11 @@ Using Pandas to load Excel files into DataFrames (`sales_df_pd` and `customer_df
 sales_df = spark.createDataFrame(sales_df_pd)
 customer_df = spark.createDataFrame(customer_df_pd)
 ```
-We convert Pandas DataFrames to Spark DataFrames for Spark processing. Spark DataFrames enable distributed processing and efficient querying
+We convert Pandas DataFrames to Spark DataFrames for Spark processing. Spark DataFrames enable distributed processing and efficient querying.
 
 ### 5\. Caching DataFrames
+
+Cache saves a copy of the data in memory, making it faster to access later.
 
 ```python
 sales_df.cache()
@@ -248,7 +250,7 @@ total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Custome
 total_customers_pd = total_customers.toPandas()
 print("Total Number of Unique Customers:", total_customers_pd['Total_Customers'][0])
 ```
-This query finds the total number of unique customers by counting distinct Customer_Id values.
+This query finds the total number of unique customers by counting distinct `Customer_Id` values.
 
 **2. Total Sales by State:**
 
