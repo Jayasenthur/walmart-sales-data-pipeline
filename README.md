@@ -20,7 +20,7 @@ Before you begin, ensure you have the following installed:
 pip install pandas  matplotlib
 ```
 
-## Why use Apache Spark
+## Why Apache Spark ?
 Apache Spark is a powerful open-source framework used for large-scale data processing and analysis. Key reasons for using Spark in this project include:
 
 ### 1\. High-Performance Computation:
@@ -46,7 +46,8 @@ Apache Spark is a powerful open-source framework used for large-scale data proce
 This will open an interactive Spark shell where you can directly execute Spark code.
 
 ## Apache Spark Web UI:
-The Spark Web UI is a useful tool for monitoring the status of your Spark jobs, checking resource utilization, and troubleshooting.
+
+The Apache Spark Web UI provides a visual interface to monitor the execution of our Spark applications. It offers valuable insights into spark job performance, resource utilization, and troubleshooting.
 
 ### 1\. Starting the Spark Web UI:
 
