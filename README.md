@@ -133,7 +133,7 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 3\. Top 10 Most Purchased Products
 
-* A bar chart named top_products.png is generated, displaying the top 10 most purchased products (based on quantity) in `Salestxns.xlsx`.
+* A bar chart named `top_products.png` is generated, displaying the top 10 most purchased products (based on quantity) in `Salestxns.xlsx`.
 
 ### 4\. Average Transaction Value
 
@@ -141,16 +141,16 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 5\. Top 5 Customers by Expenditure (Horizontal Bar Chart)
 
-* A horizontal bar chart named top_customers.png is created, showing the top 5 customers who spent the most money, according to the data from `Salestxns.xlsx` and `customers.xlsx`.
+* A horizontal bar chart named `top_customers.png` is created, showing the top 5 customers who spent the most money, according to the data from `Salestxns.xlsx` and `customers.xlsx`.
 
 ### 6\. Product Purchases by a Specific Customer (ID 245)
 
-* A plot (pie chart for few products or bar chart for many) is generated and saved as `customer_purchases_245_pie.png` or customer_purchases_245_bar.png`.
+* A plot (pie chart for few products or bar chart for many) is generated and saved as `customer_purchases_245_pie.png` or `customer_purchases_245_bar.png`.
 * The plot shows the products purchased by customer ID 245 and their total cost, based on information from `Salestxns.xlsx`.
 
 ### 7\.  Monthly Sales Trends
 
-* It demonstrates how to analyze monthly sales trends, but it assumes the existence of a `Date` column within your sales_data DataFrame.
+* It demonstrates how to analyze monthly sales trends, but it assumes the existence of a `Date` column within your `sales_data` DataFrame.
 
 ### 8\. Category with Highest Sales
 
@@ -158,7 +158,7 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
 
 ### 9\. State-wise Sales Comparison (Texas vs. Ohio)
 
-* A pie chart named `state_comparison_pie.png` is created, visualizing the sales comparison between Texas and Ohio. This comparison is based on the data in `Salestxns.xlsx` and `customers.xlsx`.
+* A pie chart named `state_comparison_pie.png` is created, visualizing the sales comparison between `Texas` and `Ohio`. This comparison is based on the data in `Salestxns.xlsx` and `customers.xlsx`.
 
 ### 10\. Detailed Customer Purchase Report (CSV File)
 
@@ -170,6 +170,7 @@ Partitions are a fundamental concept in Spark that divides data into smaller chu
      * **Customer Retention:** Analyzing customer behavior and identifying potential churn risks.
      * **Marketing Campaigns:** Targeting specific customer segments with personalized offers.
      * **Business Insights:** Gaining deeper insights into customer purchasing patterns and preferences.
+       
   By analyzing this report, we can make data-driven decisions to improve customer satisfaction, increase sales, and optimize marketing strategies.
   
 ## Code Explanation
@@ -361,7 +362,7 @@ state_comparison = spark.sql("""
 """)
 state_comparison_pd = state_comparison.toPandas()
 ```
-Compares sales between Texas and Ohio using a pie chart.
+Compares sales between `Texas` and `Ohio` using a pie chart.
 
 **10. Detailed Customer Purchase Report:**
 
