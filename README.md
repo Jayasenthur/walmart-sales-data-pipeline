@@ -190,15 +190,23 @@ Here, we import essential libraries:
 ### 2\. Initializing Spark Session with Configuration
 
 ```python
-spark = SparkSession.builder \
-    .appName("Sales Analysis") \
-    .config("spark.executor.memory", "4g") \
-    .config("spark.driver.memory", "4g") \
-    .config("spark.executor.cores", "2") \
-    .config("spark.ui.port", "4041") \
-    .config("spark.num.executors", "2") \
-    .getOrCreate()
-spark.conf.set("spark.sql.shuffle.partitions", "200")
+# Initialize Spark Session with configuration
+try:    
+    spark = SparkSession.builder \
+        .appName("Sales Analysis") \
+        .config("spark.executor.memory", "4g") \
+        .config("spark.driver.memory", "4g") \
+        .config("spark.executor.cores", "2") \
+        .config("spark.ui.port", "4041") \
+        .config("spark.num.executors", "2") \
+        .getOrCreate()
+
+    # Set shuffle partitions to optimize performance
+    spark.conf.set("spark.sql.shuffle.partitions", "200")
+
+except Exception as e:
+    print(f"Error starting SparkSession: {str(e)}")
+    exit(1)
  ```
 
 This code initializes a SparkSession with specific configurations:
@@ -208,6 +216,7 @@ This code initializes a SparkSession with specific configurations:
 * **ui.port:** Sets the Spark UI to avoid conflicts on the default port 4040.
 * **num.executors:** Specifies the number of executors for distributed computing.
 * **spark.sql.shuffle.partitions:** Sets partitions to optimize performance during shuffles.
+* **try except block:** Used to handle errors.
 
 ### 3\. Loading Data from Excel
 
