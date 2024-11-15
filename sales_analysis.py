@@ -53,7 +53,11 @@ customer_df.createOrReplaceTempView("customers")
 
 # 1. SQL query counts unique customers in the "customers" view.
 total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Customers FROM customers")
-print(total_customers.show())
+
+try:
+  total_customers.show()
+except Exception as e:
+  print(f"Error displaying results: {str(e)}")
 
 # 2. SQL Query joins sales and customers to get total sales per state and groups results by state..
 sales_by_state = spark.sql("""
@@ -102,8 +106,11 @@ plt.savefig('top_products.png')
 
 # 4. Average Transaction Value (Single Output, No Plot Needed)
 avg_transaction_value = spark.sql("SELECT AVG(Price * Quantity) AS Avg_Transaction_Value FROM sales_data")
-avg_transaction_value_pd = avg_transaction_value.toPandas()
-print("Average Transaction Value:", avg_transaction_value_pd['Avg_Transaction_Value'][0])
+
+try:
+  avg_transaction_value.show()
+except Exception as e:
+  print(f"Error displaying results: {str(e)}")
 
 # 5. Top 5 Customers by Expenditure (Horizontal Bar for better readability)
 top_customers = spark.sql("""
