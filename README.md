@@ -293,8 +293,7 @@ Aggregates sales quantity by product name, displays the top 10 most purchased pr
 
 ```python
 avg_transaction_value = spark.sql("SELECT AVG(Price * Quantity) AS Avg_Transaction_Value FROM sales_data")
-avg_transaction_value_pd = avg_transaction_value.toPandas()
-print("Average Transaction Value:", avg_transaction_value_pd['Avg_Transaction_Value'][0])
+print("Average Transaction Value:", avg_transaction_value)
 ```
 Calculates the average transaction value by multiplying `Price` and `Quantity`.
 
