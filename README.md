@@ -258,8 +258,7 @@ Temporary views allow running SQL queries directly on Spark DataFrames.
 
 ```python
 total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Customers FROM customers")
-total_customers_pd = total_customers.toPandas()
-print("Total Number of Unique Customers:", total_customers_pd['Total_Customers'][0])
+print(total_customers.show())
 ```
 This query finds the total number of unique customers by counting distinct `Customer_Id` values.
 
