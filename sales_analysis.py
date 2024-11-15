@@ -53,10 +53,7 @@ customer_df.createOrReplaceTempView("customers")
 
 # 1. SQL query counts unique customers in the "customers" view.
 total_customers = spark.sql("SELECT COUNT(DISTINCT Customer_Id) AS Total_Customers FROM customers")
-
-# Converts Spark DataFrame to Pandas for display.
-total_customers_pd = total_customers.toPandas()
-print("Total Number of Unique Customers:", total_customers_pd['Total_Customers'][0])
+print(total_customers.show())
 
 # 2. SQL Query joins sales and customers to get total sales per state and groups results by state..
 sales_by_state = spark.sql("""
